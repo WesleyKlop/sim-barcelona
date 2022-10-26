@@ -7,8 +7,6 @@ def format_sse(data: str, event=None) -> str:
         msg = f'event: {event}\n{msg}'
     return msg
 
-generator = ImageGenerator()
-
 def do_the_thing():
     content_image_path = take_picture()
     stylized_image_path = generator.generate(content_image_path)

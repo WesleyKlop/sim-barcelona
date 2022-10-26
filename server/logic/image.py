@@ -18,9 +18,13 @@ HUB_MODULE = 'https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-25
 
 class ImageGenerator:
     def __init__(self):
-        self.model = hub.load(HUB_MODULE)
+        self.model = None
 
     def generate(self, image_path: str) -> str:
+        if self.model == None:
+            print("Loading hub model")
+            self.model = hub.load(HUB_MODULE)
+
         image_path = self.load_image(image_path, IMAGE_SIZE_CONTENT)
         style_image = self.load_image(get_random_style_image(), IMAGE_SIZE_STYLE)
         style_image = tf.nn.avg_pool(
