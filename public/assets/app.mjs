@@ -5,6 +5,9 @@ evtSource.addEventListener('message', (evt) => {
     document.write(evt.data)
 })
 
-evtSource.addEventListener('error', (evt) => {
-    alert(`error: ${evt}`)
+evtSource.addEventListener('error', async (evt) => {
+    console.log('')
+    console.error(evt)
+    await new Promise(res => setTimeout(res, 5000))
+    location.reload()
 })
