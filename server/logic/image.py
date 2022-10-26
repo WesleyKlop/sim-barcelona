@@ -6,15 +6,18 @@ import tensorflow_hub as hub
 from .styles import get_random_style_image
 from .fs import generate_random_filepath
 
+
 def crop_center(image):
     """Returns a cropped square image."""
     shape = image.shape
     new_shape = min(shape[1], shape[2])
     offset_y = max(shape[1] - shape[2], 0) // 2
     offset_x = max(shape[2] - shape[1], 0) // 2
-    image = tf.image.crop_to_bounding_box(
-        image, offset_y, offset_x, new_shape, new_shape)
-    return image
+    return tf.image.crop_to_bounding_box(
+        image,
+        offset_y, offset_x,
+        new_shape, new_shape
+    )
 
 
 @functools.lru_cache(maxsize=None)
@@ -27,7 +30,7 @@ def load_image(image_path: str, image_size=(256, 256), preserve_aspect_ratio=Tru
         dtype=tf.float32
     )[tf.newaxis, ...]
 
-    img = crop_center(img)
+    img = crop_center(img) # TODO: maybe this can be removed?
     img = tf.image.resize(img, image_size, preserve_aspect_ratio)
     return img
 
@@ -61,6 +64,5 @@ def generate_stylized_image(image_path: str) -> str:
     outFile = generate_random_filepath()
     # Write the generated image tensor to the outFile
     tf.io.write_file(outFile, tf.image.encode_png(outputs[0]))
-
 
     return outFile
