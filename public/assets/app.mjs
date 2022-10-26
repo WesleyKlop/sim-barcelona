@@ -1,4 +1,4 @@
-document.write('Page loaded')
+alert('Page loaded')
 
 const evtSource = new EventSource('/api/listen')
 evtSource.addEventListener('message', (evt) => {
