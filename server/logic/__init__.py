@@ -1,5 +1,5 @@
 from .camera import take_picture
-from .image import generate_stylized_image
+from .image import ImageGenerator
 
 def format_sse(data: str, event=None) -> str:
     msg = f'data: {data}\n\n'
@@ -7,9 +7,10 @@ def format_sse(data: str, event=None) -> str:
         msg = f'event: {event}\n{msg}'
     return msg
 
+generator = ImageGenerator()
 
 def do_the_thing():
     content_image_path = take_picture()
-    stylized_image_path = generate_stylized_image(content_image_path)
+    stylized_image_path = generator.generate(content_image_path)
     print(stylized_image_path)
     pass

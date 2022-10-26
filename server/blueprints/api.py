@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from flask import Blueprint, request
+from flask import Blueprint, Response
 from server.logic.announcer import announcer
 from server.logic import format_sse
 
@@ -13,11 +13,10 @@ def hello():
     
 @api.route('/listen', methods=['GET'])
 def listen():
-
     def stream():
         messages = announcer.listen()  # returns a queue.Queue
         while True:
             msg = messages.get()  # blocks until a new message arrives
             yield msg
 
-    return flask.Response(stream(), mimetype='text/event-stream')
+    return Response(stream(), mimetype='text/event-stream')

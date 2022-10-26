@@ -12,6 +12,6 @@ def create_app() -> Flask:
         static_url_path='/'
     )
 
-    # Add our web and api blueprints
     app.register_blueprint(api)
+
     return app
