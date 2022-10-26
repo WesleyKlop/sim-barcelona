@@ -3,6 +3,8 @@ from http import HTTPStatus
 from flask import Blueprint, Response
 from server.logic.announcer import announcer
 from server.logic import format_sse
+from server.logic.image import ImageGenerator
+from server.logic.camera import take_picture
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -20,3 +22,12 @@ def listen():
             yield msg
 
     return Response(stream(), mimetype='text/event-stream')
+
+@api.route('/test', methods=['GET'])
+def test():
+    generator = ImageGenerator()
+
+    img_path = take_picture()
+    result = generator.generate('/Users/wesley/Downloads/litter.jpeg')
+    return result, HTTPStatus.OK
+

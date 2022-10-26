@@ -1,3 +1,3 @@
 
 def get_random_style_image():
-    return 'picasso.jpg'
+    return '/Users/wesley/Downloads/style.jpeg'
