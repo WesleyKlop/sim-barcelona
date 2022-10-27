@@ -10,7 +10,7 @@ from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
 
-last_timestamp = 0
+last_timestamp = time()
 
 
 def setup(mutex: Lock):
@@ -23,7 +23,7 @@ def setup(mutex: Lock):
         global last_timestamp
         announcer.log(f'Button press: detected. Mutex lock state: {mutex.locked()}.')
 
-        announcer.log(last_timestamp)
+        announcer.log(f"Last: {last_timestamp}. Current: {last_timestamp}")
         if time() - last_timestamp < 60:
             announcer.log('Cancelling because of debounce')
             return
@@ -42,7 +42,7 @@ def setup(mutex: Lock):
 
 def generate_image():
     global last_timestamp
-    last_timestamp = time()
+
     announcer.log('------Generating image...')
     announcer.sse('running', 'phase')
     generator = ImageGenerator()
@@ -59,3 +59,4 @@ def generate_image():
     announcer.log('Generated picture')
     announcer.sse('/results/' + result, 'image')
     announcer.sse('finished', 'phase')
+    last_timestamp = time()
