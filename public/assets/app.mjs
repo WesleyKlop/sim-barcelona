@@ -26,9 +26,9 @@ evtSource.addEventListener('log', ({data}) => {
 })
 
 evtSource.addEventListener('error', async (evt) => {
-    console.log('')
-    console.error(evt)
-    // Sleep 5s and reload the page
-    await new Promise(res => setTimeout(res, 5000))
+    $log.classList.remove('hidden')
+    $log.innerHTML += evt.data
+    // Sleep 10s and reload the page
+    await new Promise(res => setTimeout(res, 10000))
     location.reload()
 })

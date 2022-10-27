@@ -34,10 +34,9 @@ def do_the_thing():
 
 
 def callback(evt):
-    if mutex.locked():
+    if not mutex.acquire(blocking=False):
         return
     try:
-        mutex.acquire(blocking=True)
         do_the_thing()
     finally:
         mutex.release()
