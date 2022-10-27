@@ -43,14 +43,7 @@ def callback(evt):
         mutex.release()
 
 
-setup_called = False
-
-
 def setup():
-    global setup_called
-    if setup_called:
-        return
-    setup_called = True
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
