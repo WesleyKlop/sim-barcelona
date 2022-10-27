@@ -10,13 +10,13 @@ from server.logic.image import ImageGenerator
 BUTTON_PIN = 7
 
 mutex = Lock()
+generator = ImageGenerator()
 
 
 def do_the_thing():
+    global generator
     announcer.sse('running', 'phase')
     announcer.log('Got button press')
-    generator = ImageGenerator()
-    announcer.log('Created image generator')
 
     img_path = take_picture(abspath('public/results'))
     if img_path is None:
