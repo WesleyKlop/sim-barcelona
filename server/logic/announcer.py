@@ -12,10 +12,13 @@ class MessageAnnouncer:
         return q
 
     def log(self, msg):
-        self.announce(format_sse(msg, 'log'))
+        self.sse(msg, 'log')
+
+    def sse(self, data, event: str = None):
+        self.announce(format_sse(data, event))
 
     def announce(self, msg):
-        for i in reversed(range(len(self.listeners))):
+        for i in range(len(self.listeners)):
             try:
                 self.listeners[i].put_nowait(msg)
             except queue.Full:
