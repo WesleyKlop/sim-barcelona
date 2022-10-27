@@ -2,7 +2,7 @@ body {
     margin: 0;
     transform: rotate(180deg);
     transform-origin: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .loading-overlay {
