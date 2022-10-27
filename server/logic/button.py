@@ -23,15 +23,13 @@ def setup(mutex: Lock):
             return
         try:
             print("Button press: accepted. Generating image.")
-            generateImage()
+            generate_image()
         finally:
             mutex.release()
 
-
     GPIO.add_event_detect(BUTTON_PIN, GPIO.BOTH, callback=callback, bouncetime=400)
-    pass
 
-def generateImage():
+def generate_image():
     announcer.log('------Generating image...')
     announcer.sse('running', 'phase')
     generator = ImageGenerator()
