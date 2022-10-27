@@ -13,12 +13,12 @@ mutex = Lock()
 
 
 def do_the_thing():
+    announcer.sse('start', 'phase')
     announcer.log('Got button press')
     generator = ImageGenerator()
     announcer.log('Created image generator')
 
     img_path = take_picture(abspath('public/results'))
-    announcer.sse('start', 'phase')
     if img_path is None:
         announcer.log('Failed to take picture')
         return None
