@@ -27,7 +27,6 @@ def setup(mutex: Lock):
         finally:
             mutex.release()
 
-    announcer.log()
     GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
     pass
 
