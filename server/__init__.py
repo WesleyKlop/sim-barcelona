@@ -7,7 +7,6 @@ from .logic import button
 
 
 def create_app() -> Flask:
-    button.setup()
     app = Flask(
         __name__,
         static_folder=abspath('public'),
