@@ -32,21 +32,16 @@ def do_the_thing():
     announcer.sse('finished', 'phase')
 
 
-lock_file = gettempdir() + '/button.lock'
-is_called = False
+lock_file = '/tmp/button.lock'
 
 
 def setup():
-    assert threading.current_thread() is threading.main_thread()
-    global is_called
-    if is_called:
-        return
-    is_called = True
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def callback(evt):
+        assert threading.current_thread() is threading.main_thread()
         os.sync()
         announcer.log('Button callback')
         if exists(lock_file):
