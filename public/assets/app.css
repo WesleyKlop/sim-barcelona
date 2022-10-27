@@ -1,11 +1,11 @@
-#loading-overlay {
+.loading-overlay {
     position: fixed;
     inset: 0;
     background-color: rgba(1, 1, 1, 0.2);
     display: flex;
 }
 
-#loading-overlay span {
+.loading-overlay span {
     margin: auto;
     font-size: 4rem;
     color: #fff;
