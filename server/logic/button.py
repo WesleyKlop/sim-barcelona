@@ -40,6 +40,7 @@ def setup():
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def callback(evt):
+        os.sync()
         announcer.log('Button callback')
         if exists(lock_file):
             announcer.log('Dropping button press')
