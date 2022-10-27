@@ -16,3 +16,5 @@ app = Flask(
 )
 
 app.register_blueprint(api)
+
+app.run(host='0.0.0.0', debug=False)
