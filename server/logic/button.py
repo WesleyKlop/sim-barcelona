@@ -1,5 +1,6 @@
 from os.path import abspath, basename
 from threading import Lock
+from time import time
 
 import RPi.GPIO as GPIO
 
@@ -9,6 +10,8 @@ from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
 
+last_timestamp = 0
+
 
 def setup(mutex: Lock):
     announcer.log(msg=f"Running setup. Mutex: {mutex.locked()}")
@@ -17,9 +20,15 @@ def setup(mutex: Lock):
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def callback(evt):
+        global last_timestamp
         announcer.log(f'Button press: detected. Mutex lock state: {mutex.locked()}.')
+
+        if time() - last_timestamp < 60:
+            announcer.log('Cancelling because of debounce')
+            return
+
         if not mutex.acquire(blocking=False):
-            announcer.log('Button press: canceling')
+            announcer.log('Button press: cancelling')
             return
         try:
             announcer.log("Button press: accepted. Generating image.")
@@ -31,6 +40,7 @@ def setup(mutex: Lock):
 
 
 def generate_image():
+    last_timestamp = time()
     announcer.log('------Generating image...')
     announcer.sse('running', 'phase')
     generator = ImageGenerator()
