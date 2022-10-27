@@ -25,7 +25,7 @@ evtSource.addEventListener('phase', ({data}) => {
 
     switch(data) {
         case 'running':
-            // clearLog()
+            clearLog()
             setLoading(true)
             break
         case 'finished':
