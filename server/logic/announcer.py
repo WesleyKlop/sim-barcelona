@@ -18,7 +18,7 @@ class MessageAnnouncer:
         self.announce(format_sse(data, event))
 
     def announce(self, msg):
-        for i in range(len(self.listeners)):
+        for i in reversed(range(len(self.listeners))):
             try:
                 self.listeners[i].put_nowait(msg)
             except queue.Full:
