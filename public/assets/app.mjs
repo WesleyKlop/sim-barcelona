@@ -26,10 +26,10 @@ evtSource.addEventListener('phase', ({data}) => {
     switch(data) {
         case 'running':
             clearLog()
-            // setLoading(true)
+            setLoading(true)
             break
         case 'finished':
-            // setLoading(false)
+            setLoading(false)
             break
     }
 })
