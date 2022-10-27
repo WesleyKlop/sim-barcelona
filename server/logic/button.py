@@ -38,6 +38,7 @@ def callback(evt):
         announcer.log('Dropping button press')
         return
     try:
+        print("Doing the thing")
         do_the_thing()
     finally:
         mutex.release()
