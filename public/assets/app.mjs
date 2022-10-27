@@ -5,6 +5,12 @@ evtSource.addEventListener('message', (evt) => {
     document.write(evt.data)
 })
 
+evtSource.addEventListener('result', ({data}) => {
+    const image = new Image()
+    image.src = data
+    document.body.appendChild(image)
+})
+
 evtSource.addEventListener('error', async (evt) => {
     console.log('')
     console.error(evt)

@@ -1,4 +1,5 @@
 import functools
+import os.path
 
 import tensorflow as tf
 
@@ -57,7 +58,7 @@ class ImageGenerator:
             interpreter.get_output_details()[0]["index"]
         )()
 
-    def generate(self, image_path: str) -> str:
+    def generate(self, image_path: str, dest_path: str) -> str:
         content_image = self.load_image(image_path, IMAGE_SIZE_CONTENT)
         style_image = self.load_image(
             get_random_style_image(),
@@ -67,18 +68,19 @@ class ImageGenerator:
         style_bottleneck = self.predict(style_image)
         stylized_image = self.transform(content_image, style_bottleneck)
 
-        out_file = generate_random_filepath()
+        out_file = generate_random_filepath(dest_path)
         # Write the generated image tensor to the outFile
-        tf.io.write_file(
-            out_file,
-            tf.image.encode_png(
-                tf.squeeze(
-                    tf.image.convert_image_dtype(stylized_image, dtype=tf.uint8)
+        encoded_image = tf.image.encode_png(
+            tf.squeeze(
+                tf.image.convert_image_dtype(
+                    stylized_image,
+                    dtype=tf.uint8
                 )
             )
         )
+        tf.io.write_file(out_file, encoded_image)
 
-        return out_file
+        return os.path.basename(out_file)
 
     def crop(self, image):
         """Returns a cropped square image."""

@@ -1,2 +1,5 @@
+from os.path import abspath
+
+
 def get_random_style_image():
-    return '/Users/wesley/Developer/WesleyKlop/sim-barcelona/public/assets/style.jpeg'
+    return abspath('public/assets/style.jpeg')

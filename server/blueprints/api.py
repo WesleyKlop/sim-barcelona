@@ -1,5 +1,7 @@
 from http import HTTPStatus
+from os.path import abspath, join
 
+import flask
 from flask import Blueprint, Response
 
 from server.logic import format_sse
@@ -35,6 +37,6 @@ def test():
     if img_path is None:
         return 'Failure', HTTPStatus.IM_A_TEAPOT
 
-    result = generator.generate(img_path)
-    announcer.announce(format_sse(result, 'result'))
+    result = generator.generate(img_path, abspath('public/results'))
+    announcer.announce(format_sse(flask.url_for('static', filename=join('results', result)), 'result'))
     return result, HTTPStatus.OK

@@ -1,7 +1,7 @@
-import os
-import tempfile
-import uuid
+from os.path import join
+from tempfile import gettempdir
+from uuid import uuid4
 
 
-def generate_random_filepath() -> str:
-    return os.path.join(tempfile.gettempdir(), str(uuid.uuid4()) + '.png')
+def generate_random_filepath(parent_dir: str = gettempdir()) -> str:
+    return join(parent_dir, str(uuid4()) + '.png')
