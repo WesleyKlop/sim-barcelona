@@ -1,13 +1,14 @@
+from time import sleep
+
 from cv2 import VideoCapture, imwrite
 
 from .fs import generate_random_filepath
 
-cam = VideoCapture(0)
-
-
 def take_picture(dest_dir: str = None):
+    cam = VideoCapture(0)
     # Take picture using usb webcam
     # Returns the path to the picture
+    sleep(5)
     s, img = cam.read()
     if s:
         # Save the image
