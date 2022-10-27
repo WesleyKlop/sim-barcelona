@@ -38,7 +38,7 @@ evtSource.addEventListener('phase', ({data}) => {
 })
 
 evtSource.addEventListener('image', ({data}) => {
-    if(phase !== 'running')
+    if(phase !== 'finished')
     setImage(data)
 })
 
