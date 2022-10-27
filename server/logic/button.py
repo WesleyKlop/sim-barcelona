@@ -48,6 +48,7 @@ def setup():
         try:
             with open(lock_file, 'w') as f:
                 pass
+            os.sync()
             do_the_thing()
         finally:
             os.remove(lock_file)
