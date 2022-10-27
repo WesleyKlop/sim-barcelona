@@ -23,15 +23,15 @@ const setLoading = (isLoading) => {
 evtSource.addEventListener('phase', ({data}) => {
     console.log('New phase', data)
 
-    // switch(data) {
-    //     case 'running':
-    //         clearLog()
-    //         setLoading(true)
-    //         break
-    //     case 'finished':
-    //         setLoading(false)
-    //         break
-    // }
+    switch(data) {
+        case 'running':
+            clearLog()
+            setLoading(true)
+            break
+        case 'finished':
+            setLoading(false)
+            break
+    }
 })
 
 evtSource.addEventListener('image', ({data}) => {
