@@ -11,13 +11,13 @@ from server.logic.image import ImageGenerator
 BUTTON_PIN = 7
 
 def setup(mutex: Lock):
-    announcer.log(f"Running setup. Mutex: {mutex.acquire(blocking=False)}")
+    announcer.log(msg=f"Running setup. Mutex: {mutex.locked()}")
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def callback(evt):
-        announcer.log(f'Button press: detected. Mutex lock state: {mutex.acquire(blocking=False)}.')
+        announcer.log(f'Button press: detected. Mutex lock state: {mutex.locked()}.')
         if not mutex.acquire(blocking=False):
             announcer.log('Button press: canceling')
             return
