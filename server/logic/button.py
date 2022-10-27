@@ -1,4 +1,5 @@
-from os.path import abspath, basename
+import os.path
+from threading import Lock
 
 import RPi.GPIO as GPIO
 import flask
@@ -9,8 +10,7 @@ from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
 
-# Lock
-is_running = False
+mutex = Lock()
 
 
 def do_the_thing():
@@ -18,29 +18,28 @@ def do_the_thing():
     generator = ImageGenerator()
     announcer.log('Created image generator')
 
-    img_path = take_picture(abspath('public/results'))
+    img_path = take_picture(os.path.abspath('public/results'))
     announcer.announce(
-        format_sse(flask.url_for('static', filename='results/' + basename(img_path)), 'start'))
+        format_sse(flask.url_for('static', filename='results/' + os.path.basename(img_path)), 'start'))
     if img_path is None:
         announcer.log('Failed to take picture')
-        return
+        return None
     announcer.log('Got picture')
 
-    result = generator.generate(img_path, abspath('public/results'))
+    result = generator.generate(img_path, os.path.abspath('public/results'))
     announcer.announce(
         format_sse(flask.url_for('static', filename='results/' + result), 'result')
     )
 
 
 def callback(evt):
-    global is_running
-    if is_running is True:
+    if mutex.locked():
         return
-    is_running = True
     try:
+        mutex.acquire(blocking=True)
         do_the_thing()
     finally:
-        is_running = False
+        mutex.release()
 
 
 def setup(cb=callback):
