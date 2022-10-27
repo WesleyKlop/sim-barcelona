@@ -14,12 +14,12 @@ def take_picture(dest_dir: str = None):
     sleep(5)
     announcer.log('Slept')
     s, img = cam.read()
-    announcer.log('got picture')
+    announcer.log('Picture taken')
     if s:
         # Save the image
         path = generate_random_filepath(dest_dir)
         imwrite(path, img)
-        print(path)
+        announcer.log('Picture written to ' + path)
         return path
 
     print("Picture capture error")
