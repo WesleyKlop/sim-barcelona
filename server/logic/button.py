@@ -2,6 +2,7 @@ import logging as log
 import os
 from os.path import abspath, basename, exists
 from tempfile import gettempdir
+from threading import Lock
 
 import RPi.GPIO as GPIO
 
@@ -31,26 +32,19 @@ def do_the_thing():
     announcer.sse('finished', 'phase')
 
 
-lock_file = gettempdir() + '/button.lock'
-
-
-def setup():
+def setup(lock: Lock):
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def callback(evt):
         announcer.log('Button callback')
-        os.sync()
-        if exists(lock_file):
+        if not lock.acquire(blocking=False):
             announcer.log('Dropping button press')
             return
         try:
-            with open(lock_file, 'w') as f:
-                pass
-            os.sync()
             do_the_thing()
         finally:
-            os.remove(lock_file)
+            lock.release()
 
     GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
