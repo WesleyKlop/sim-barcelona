@@ -3,11 +3,16 @@
   <head>
     <title>SIM Barcelona app</title>
     <script type="module" src="/assets/app.mjs"></script>
+    <link rel="stylesheet" href="/assets/app.css" />
   </head>
   <body>
     <div style="display: flex; flex-flow: row nowrap">
       <img id="before" style="width: 50%; object-fit: contain" />
       <img id="result" style="width: 50%; object-fit: contain" />
+    </div>
+
+    <div id="loading-overlay" class="hidden">
+      <span>Loading...</span>
     </div>
 
     <pre id="log">Log:</pre>

@@ -11,12 +11,6 @@ from server.logic.image import ImageGenerator
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
-
-@api.route('/')
-def index():
-    return render_template('api_index.html')
-
-
 @api.route('/listen', methods=['GET'])
 def listen():
     def stream():
