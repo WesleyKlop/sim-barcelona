@@ -24,6 +24,7 @@ const setLoading = (isLoading) => {
 
 evtSource.addEventListener('phase', ({data}) => {
     console.log('New phase', data)
+    alert(data)
     phase = data
 
     switch(data) {
