@@ -3,21 +3,39 @@ const evtSource = new EventSource('/api/listen')
 const $log = document.querySelector('#log')
 const $result = document.querySelector('#result')
 const $loadingOverlay = document.querySelector('#loading-overlay')
-const $main = document.documentElement;
 
-evtSource.addEventListener('start', ({data}) => {
-    console.log("start")
+const clearLog = () => {
     $log.innerHTML = 'Log:\n'
-    $result.src = data
+}
 
-    $loadingOverlay.classList.remove('hidden')
+const setImage = (url) => {
+    $result.src = url
+}
+
+const setLoading = (isLoading) => {
+    if(isLoading) {
+        $loadingOverlay.classList.remove('hidden')
+    } else {
+        $loadingOverlay.classList.add('hidden')
+    }
+}
+
+evtSource.addEventListener('phase', ({data}) => {
+    console.log('New phase', data)
+
+    switch(data) {
+        case 'start':
+            clearLog()
+            setLoading(true)
+            break
+        case 'finished':
+            setLoading(false)
+    }
 })
 
-evtSource.addEventListener('result', ({data}) => {
-    console.log("result")
-    $result.src = data
-
-    $loadingOverlay.classList.add('hidden')
+evtSource.addEventListener('image', ({data}) => {
+    console.log("Got image")
+    setImage(data)
 })
 
 evtSource.addEventListener('log', ({data}) => {

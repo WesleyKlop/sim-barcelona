@@ -18,19 +18,17 @@ def do_the_thing():
     announcer.log('Created image generator')
 
     img_path = take_picture(abspath('public/results'))
-    announcer.announce(
-        format_sse('/results/' + basename(img_path), 'start')
-    )
+    announcer.sse('start', 'phase')
     if img_path is None:
         announcer.log('Failed to take picture')
         return None
+    announcer.sse('/results/' + basename(img_path), 'image')
     announcer.log('Got picture')
 
     result = generator.generate(img_path, abspath('public/results'))
     announcer.log('Generated picture')
-    announcer.announce(
-        format_sse('/results/' + result, 'result')
-    )
+    announcer.sse('/results/' + result, 'image')
+    announcer.sse('finished', 'phase')
 
 
 def callback(evt):
