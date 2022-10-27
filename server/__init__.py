@@ -1,3 +1,4 @@
+import logging
 from os.path import abspath
 
 from flask import Flask, g, request, Response
@@ -7,7 +8,7 @@ from .logic import button
 
 
 def create_app() -> Flask:
-    print("Create app called")
+    logging.info("aaaaa")
     button.setup()
     app = Flask(
         __name__,
