@@ -10,7 +10,7 @@ from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
 
-last_timestamp = time()
+last_timestamp = 0
 
 
 def setup(mutex: Lock):
