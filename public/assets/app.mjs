@@ -4,8 +4,6 @@ const $log = document.querySelector('#log')
 const $result = document.querySelector('#result')
 const $loadingOverlay = document.querySelector('#loading-overlay')
 
-let phase = 'finished'
-
 const clearLog = () => {
     $log.innerHTML = 'Log:\n'
 }
@@ -24,7 +22,6 @@ const setLoading = (isLoading) => {
 
 evtSource.addEventListener('phase', ({data}) => {
     console.log('New phase', data)
-    phase = data
 
     switch(data) {
         case 'running':
