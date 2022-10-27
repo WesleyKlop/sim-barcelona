@@ -1,4 +1,3 @@
-import logging as log
 from os.path import abspath, basename
 from threading import Lock
 
@@ -9,6 +8,7 @@ from server.logic.camera import take_picture
 from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
+
 
 def setup(mutex: Lock):
     announcer.log(msg=f"Running setup. Mutex: {mutex.locked()}")
@@ -27,7 +27,8 @@ def setup(mutex: Lock):
         finally:
             mutex.release()
 
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.BOTH, callback=callback, bouncetime=200)
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback, bouncetime=200)
+
 
 def generate_image():
     announcer.log('------Generating image...')
