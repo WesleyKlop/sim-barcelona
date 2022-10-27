@@ -23,6 +23,7 @@ def setup(mutex: Lock):
         global last_timestamp
         announcer.log(f'Button press: detected. Mutex lock state: {mutex.locked()}.')
 
+        announcer.log(last_timestamp)
         if time() - last_timestamp < 60:
             announcer.log('Cancelling because of debounce')
             return
