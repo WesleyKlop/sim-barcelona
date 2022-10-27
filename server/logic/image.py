@@ -3,9 +3,8 @@ import functools
 import tensorflow as tf
 import tensorflow_hub as hub
 
-from .styles import get_random_style_image
 from .fs import generate_random_filepath
-
+from .styles import get_random_style_image
 
 IMAGE_SIZE_OUTPUT = 384
 IMAGE_SIZE_CONTENT = (IMAGE_SIZE_OUTPUT, IMAGE_SIZE_OUTPUT)
@@ -18,9 +17,13 @@ IMAGE_SIZE_STYLE = (256, 256)
 class ImageGenerator:
     def __init__(self):
         self.predict_path = tf.keras.utils.get_file(
-            'style_predict.tflite', 'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/prediction/1?lite-format=tflite')
+            'style_predict.tflite',
+            'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/prediction/1?lite-format=tflite'
+        )
         self.transform_path = tf.keras.utils.get_file(
-            'style_transform.tflite', 'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/transfer/1?lite-format=tflite')
+            'style_transform.tflite',
+            'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/transfer/1?lite-format=tflite'
+        )
 
     def predict(self, style_image):
         # Load the model.

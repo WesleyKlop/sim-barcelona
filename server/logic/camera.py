@@ -1,5 +1,7 @@
 from cv2 import VideoCapture, imwrite
+
 from .fs import generate_random_filepath
+
 
 def take_picture():
     # Take picture using usb webcam

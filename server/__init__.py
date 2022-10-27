@@ -1,5 +1,6 @@
-from flask import Flask, g, request, Response
 from os.path import abspath
+
+from flask import Flask, g, request, Response
 
 from .blueprints.api import api
 
@@ -11,7 +12,7 @@ def create_app() -> Flask:
         static_folder=abspath('public'),
         static_url_path='/'
     )
-   
+
     app.register_blueprint(api)
 
     return app
