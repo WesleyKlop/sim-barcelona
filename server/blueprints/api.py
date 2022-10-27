@@ -1,6 +1,6 @@
 import os.path
 from http import HTTPStatus
-from os.path import abspath, join
+from os.path import abspath
 
 import flask
 from flask import Blueprint, Response
@@ -37,7 +37,7 @@ def test():
 
     img_path = take_picture(abspath('public/results'))
     announcer.announce(
-        format_sse(flask.url_for('static', filename=join('results', os.path.basename(img_path))), 'start'))
+        format_sse(flask.url_for('static', filename='results/' + os.path.basename(img_path)), 'start'))
     if img_path is None:
         announcer.log('Failed to take picture')
         return 'Failure', HTTPStatus.IM_A_TEAPOT
@@ -45,8 +45,6 @@ def test():
 
     result = generator.generate(img_path, abspath('public/results'))
     announcer.announce(
-        format_sse(flask.url_for('static', filename=join('results', result)),
-                   'result'
-                   )
+        format_sse(flask.url_for('static', filename='results/' + result), 'result')
     )
     return result + '\n', HTTPStatus.OK
