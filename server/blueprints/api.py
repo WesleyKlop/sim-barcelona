@@ -49,4 +49,4 @@ def test():
                    'result'
                    )
     )
-    return result, HTTPStatus.OK
+    return result + '\n', HTTPStatus.OK
