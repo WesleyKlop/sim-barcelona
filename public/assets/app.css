@@ -1,7 +1,3 @@
-.hidden {
-    display: none
-}
-
 #loading-overlay {
     position: fixed;
     inset: 0;
@@ -13,4 +9,8 @@
     margin: auto;
     font-size: 4rem;
     color: #fff;
+}
+
+.hidden {
+    display: none;
 }
