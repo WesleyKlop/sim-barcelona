@@ -1,4 +1,4 @@
-import os.path
+from os.path import abspath, basename
 from threading import Lock
 
 import RPi.GPIO as GPIO
@@ -17,16 +17,16 @@ def do_the_thing():
     generator = ImageGenerator()
     announcer.log('Created image generator')
 
-    img_path = take_picture(os.path.abspath('public/results'))
+    img_path = take_picture(abspath('public/results'))
     announcer.announce(
-        format_sse('/results/' + os.path.basename(img_path), 'start')
+        format_sse('/results/' + basename(img_path), 'start')
     )
     if img_path is None:
         announcer.log('Failed to take picture')
         return None
     announcer.log('Got picture')
 
-    result = generator.generate(img_path, os.path.abspath('public/results'))
+    result = generator.generate(img_path, abspath('public/results'))
     announcer.log('Generated picture')
     announcer.announce(
         format_sse('/results/' + result, 'result')
