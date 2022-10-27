@@ -47,4 +47,4 @@ def setup(lock: Lock):
         finally:
             lock.release()
 
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback, bouncetime=400)
