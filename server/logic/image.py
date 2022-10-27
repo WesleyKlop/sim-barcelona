@@ -15,7 +15,7 @@ IMAGE_SIZE_STYLE = (256, 256)
 
 
 class ImageGenerator:
-    def __init__(self):
+    def load_int8_models(self):
         self.predict_path = tf.keras.utils.get_file(
             'style_predict.tflite',
             'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/prediction/1?lite-format=tflite'
@@ -24,6 +24,14 @@ class ImageGenerator:
             'style_transform.tflite',
             'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/transfer/1?lite-format=tflite'
         )
+
+    def __init__(self):
+        self.transform_path = None
+        self.predict_path = None
+        if len(tf.config.list_physical_devices('GPU')) == 0:
+            self.load_int8_models()
+        else:
+            self.load_fp16_models()
 
     def predict(self, style_image):
         # Load the model.
@@ -108,3 +116,13 @@ class ImageGenerator:
         img = tf.image.resize(
             img, image_size, preserve_aspect_ratio=preserve_aspect_ratio)
         return img
+
+    def load_fp16_models(self):
+        self.predict_path = tf.keras.utils.get_file(
+            'style_predict.tflite',
+            'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/fp16/prediction/1?lite-format=tflite'
+        )
+        self.transform_path = tf.keras.utils.get_file(
+            'style_transform.tflite',
+            'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/fp16/transfer/1?lite-format=tflite'
+        )
