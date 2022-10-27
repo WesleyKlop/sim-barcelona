@@ -40,6 +40,7 @@ def setup(mutex: Lock):
 
 
 def generate_image():
+    global last_timestamp
     last_timestamp = time()
     announcer.log('------Generating image...')
     announcer.sse('running', 'phase')
