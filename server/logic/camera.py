@@ -11,7 +11,7 @@ def take_picture(dest_dir: str = None):
     cam = VideoCapture(0)
     # Take picture using usb webcam
     # Returns the path to the picture
-    sleep(5)
+    sleep(2)
     announcer.log('Slept')
     s, img = cam.read()
     announcer.log('Picture taken')
