@@ -1,5 +1,6 @@
 import logging as log
 import os
+import threading
 from os.path import abspath, basename, exists
 from tempfile import gettempdir
 
@@ -35,6 +36,7 @@ lock_file = gettempdir() + '/button.lock'
 
 
 def setup():
+    assert threading.current_thread() is threading.main_thread()
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
