@@ -1,5 +1,4 @@
 import os.path
-from asyncio.windows_events import NULL
 from http import HTTPStatus
 from os.path import abspath
 
@@ -13,27 +12,9 @@ from server.logic.image import ImageGenerator
 api = Blueprint('api', __name__, url_prefix='/api')
 
 
-import time
-
-api = Blueprint('api', __name__, url_prefix='/api')
-
-#main app html
 @api.route('/')
 def index():
     return render_template('api_index.html')
-
-#python call test
-@api.route('/python_call_test')
-def background_process_test():
-    print ("Hello")
-    time.sleep(5)
-    return ("nothing")
-
-
-@api.route('/hello', methods=['GET'])
-def hello():
-    announcer.announce(format_sse('Hello, world!'))
-    return 'Hello World!', HTTPStatus.OK
 
 
 @api.route('/listen', methods=['GET'])
