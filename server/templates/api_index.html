@@ -1,71 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>SIM Barcelona app</title>
-        <script type="module" src="/assets/app.mjs"></script>
-    </head>
-    <body>
-        <div id="main">
-            <div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Koala_climbing_tree.jpg/640px-Koala_climbing_tree.jpg"/>
-            </div>  
-            <button onClick="generateImage()">Generate image</button>
-        </div>
-    </body>
+  <head>
+    <title>SIM Barcelona app</title>
+    <script type="module" src="/assets/app.mjs"></script>
+  </head>
+  <body>
+    <div id="main">
+      <div>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Koala_climbing_tree.jpg/640px-Koala_climbing_tree.jpg"
+        />
+      </div>
+      <button onClick="generateImage()">Generate image</button>
+    </div>
+    <div style="display: flex; flex-flow: row nowrap">
+      <img id="before" style="width: 50%; object-fit: contain" />
+      <img id="result" style="width: 50%; object-fit: contain" />
+    </div>
+
+    <pre id="log">Log:</pre>
+  </body>
 </html>
 
 <script>
-    function onCallStateChange(event) {
-        console.log(event)
-        disableLoading()
-    }
+  function onCallStateChange(event) {
+    console.log(event);
+    disableLoading();
+  }
 
-    function generateImage() {
-        // e.preventDefault();
-        // const oldOpen = XMLHttpRequest.prototype.open;
-        let request = new XMLHttpRequest();
-        // request.open = function () {
-        //     this.addEventListener("load", onCallStateChange)
-        //     oldOpen.apply(this, arguments)
-        // }
+  function generateImage() {
+    let request = new XMLHttpRequest();
 
-        request.onload = function() {
-            alert("request send")
-            disableLoading()
-        }
-        request.open("GET", "python_call_test", true)
-        request.send()
+    request.onload = function () {
+      alert("request send");
+      disableLoading();
+    };
+    request.open("GET", "python_call_test", true);
+    request.send();
 
-        document.getElementById("main").innerHTML += `
+    document.getElementById("main").innerHTML += `
             <div id="loading-div" class="loading-div">
                 <text class="loading-text">loading...</text>
-            </div>`
-        // setTimeout(() => disableLoading(), 3000)
-    }
+            </div>`;
+    // setTimeout(() => disableLoading(), 3000)
+  }
 
-    function disableLoading() {
-        const mainEl = document.getElementById("main");
-        mainEl.removeChild(mainEl.lastChild)
-    }
+  function disableLoading() {
+    const mainEl = document.getElementById("main");
+    mainEl.removeChild(mainEl.lastChild);
+  }
 </script>
 
-<style>
-.loading-div {
-    position: absolute;
-    left: 0;
-    top: 0;
-    background-color: rgba(1,1,1,.2);
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-}
-.loading-text {
-    /* width: inherit;
-    height: inherit; */
-    font-size: 15em;
-    color: white;
-    text-shadow: 0 0 20px #000; /* horizontal-offset vertical-offset 'blur' colour */
-}
-</style>
