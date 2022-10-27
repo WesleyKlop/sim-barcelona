@@ -31,7 +31,10 @@ def listen():
 def test():
     generator = ImageGenerator()
 
-    # img_path = take_picture()
-    result = generator.generate('/Users/wesley/Downloads/litter.jpeg')
+    img_path = take_picture()
+    if img_path is None:
+        return 'Failure', HTTPStatus.IM_A_TEAPOT
+
+    result = generator.generate(img_path)
     announcer.announce(format_sse(result, 'result'))
     return result, HTTPStatus.OK
