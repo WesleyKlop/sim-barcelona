@@ -1,7 +1,5 @@
 import logging as log
-import os
-from os.path import abspath, basename, exists
-from tempfile import gettempdir
+from os.path import abspath, basename
 from threading import Lock
 
 import RPi.GPIO as GPIO
@@ -37,7 +35,7 @@ def setup(lock: Lock):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    def callback(evt):
+    def rise_callback(evt):
         announcer.log('Button callback')
         if not lock.acquire(blocking=False):
             announcer.log('Dropping button press')
@@ -47,4 +45,8 @@ def setup(lock: Lock):
         finally:
             lock.release()
 
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback, bouncetime=400)
+    def fall_callback(evt):
+        announcer.log('Button fallCallback')
+
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=rise_callback, bouncetime=400)
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=fall_callback, bouncetime=400)
