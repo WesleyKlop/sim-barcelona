@@ -1,11 +1,9 @@
 from os.path import abspath
-from threading import Lock
 
 from flask import Flask
 
 from .blueprints.api import api
 from .logic import button
-
 
 button.setup()
 
@@ -17,4 +15,5 @@ app = Flask(
 
 app.register_blueprint(api)
 
-app.run(host='0.0.0.0', debug=False)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=False)
