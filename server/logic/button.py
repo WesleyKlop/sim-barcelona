@@ -3,7 +3,7 @@ from threading import Lock
 
 import RPi.GPIO as GPIO
 
-from server.logic.announcer import announcer, format_sse
+from server.logic.announcer import announcer
 from server.logic.camera import take_picture
 from server.logic.image import ImageGenerator
 
