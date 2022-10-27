@@ -36,6 +36,7 @@ def setup(mutex: Lock):
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def callback(evt):
+        announcer.log('Button callback')
         if not mutex.acquire(blocking=False):
             announcer.log('Dropping button press')
             return
