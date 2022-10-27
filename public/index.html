@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>SIM Barcelona app</title>
-        <script type="module" src="/assets/app.mjs"></script>
-    </head>
-    <body>
-        <script>document.write(window.location.href)</script>
-        Test!
+<head>
+    <title>SIM Barcelona app</title>
+    <script type="module" src="/assets/app.mjs"></script>
+</head>
+<body>
+<div style="display: flex; flex-flow: row nowrap;">
+    <img id="before" style="width: 50%; object-fit: contain"/>
+    <img id="result" style="width: 50%; object-fit: contain"/>
+</div>
 
-        <pre id="log">Log:</pre>
-    </body>
+<pre id="log">Log:</pre>
+</body>
 </html>

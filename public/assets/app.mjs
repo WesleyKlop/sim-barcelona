@@ -1,16 +1,21 @@
 const evtSource = new EventSource('/api/listen')
 
 const $log = document.querySelector('#log')
+const $before = document.querySelector('#before')
+const $result = document.querySelector('#result')
 
 evtSource.addEventListener('message', (evt) => {
     alert('Got data!')
     document.write(evt.data)
 })
 
+evtSource.addEventListener('start', ({data}) => {
+    $log.innerHTML = 'Log:\n'
+    $before.src = data
+})
+
 evtSource.addEventListener('result', ({data}) => {
-    const image = new Image()
-    image.src = data
-    document.body.appendChild(image)
+    $result.src = data
 })
 
 evtSource.addEventListener('log', ({data}) => {

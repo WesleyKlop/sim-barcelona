@@ -1,3 +1,4 @@
+import os.path
 from http import HTTPStatus
 from os.path import abspath, join
 
@@ -34,12 +35,18 @@ def test():
     generator = ImageGenerator()
     announcer.log('Created image generator')
 
-    img_path = take_picture()
+    img_path = take_picture(abspath('public/results'))
+    announcer.announce(
+        format_sse(flask.url_for('static', filename=join('results', os.path.basename(img_path))), 'start'))
     if img_path is None:
         announcer.log('Failed to take picture')
         return 'Failure', HTTPStatus.IM_A_TEAPOT
     announcer.log('Got picture')
 
     result = generator.generate(img_path, abspath('public/results'))
-    announcer.announce(format_sse(flask.url_for('static', filename=join('results', result)), 'result'))
+    announcer.announce(
+        format_sse(flask.url_for('static', filename=join('results', result)),
+                   'result'
+                   )
+    )
     return result, HTTPStatus.OK
