@@ -1,15 +1,33 @@
 import os.path
+from asyncio.windows_events import NULL
 from http import HTTPStatus
 from os.path import abspath, join
 
 import flask
-from flask import Blueprint, Response
+from flask import Blueprint, Response, render_template
 
 from server.logic.announcer import announcer, format_sse
 from server.logic.camera import take_picture
 from server.logic.image import ImageGenerator
 
 api = Blueprint('api', __name__, url_prefix='/api')
+
+
+import time
+
+api = Blueprint('api', __name__, url_prefix='/api')
+
+#main app html
+@api.route('/')
+def index():
+    return render_template('api_index.html')
+
+#python call test
+@api.route('/python_call_test')
+def background_process_test():
+    print ("Hello")
+    time.sleep(5)
+    return ("nothing")
 
 
 @api.route('/hello', methods=['GET'])
