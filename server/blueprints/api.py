@@ -30,12 +30,15 @@ def listen():
 
 @api.route('/test', methods=['GET'])
 def test():
+    announcer.log('Got request on test')
     generator = ImageGenerator()
+    announcer.log('Created image generator')
 
     img_path = take_picture()
     if img_path is None:
         announcer.log('Failed to take picture')
         return 'Failure', HTTPStatus.IM_A_TEAPOT
+    announcer.log('Got picture')
 
     result = generator.generate(img_path, abspath('public/results'))
     announcer.announce(format_sse(flask.url_for('static', filename=join('results', result)), 'result'))
