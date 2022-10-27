@@ -1,6 +1,5 @@
 import logging as log
 import os
-import threading
 from os.path import abspath, basename, exists
 from tempfile import gettempdir
 
@@ -32,7 +31,7 @@ def do_the_thing():
     announcer.sse('finished', 'phase')
 
 
-lock_file = '/tmp/button.lock'
+lock_file = gettempdir() + '/button.lock'
 
 
 def setup():
@@ -41,9 +40,8 @@ def setup():
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def callback(evt):
-        assert threading.current_thread() is threading.main_thread()
-        os.sync()
         announcer.log('Button callback')
+        os.sync()
         if exists(lock_file):
             announcer.log('Dropping button press')
             return
