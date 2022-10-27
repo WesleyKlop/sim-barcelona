@@ -6,9 +6,8 @@ from flask import Flask
 from .blueprints.api import api
 from .logic import button
 
-button_mutex = Lock()
 
-button.setup(button_mutex)
+button.setup()
 
 app = Flask(
     __name__,

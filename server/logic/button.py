@@ -1,6 +1,7 @@
 import logging as log
-from os.path import abspath, basename
-from threading import Lock
+import os
+from os.path import abspath, basename, exists
+from tempfile import gettempdir
 
 import RPi.GPIO as GPIO
 
@@ -30,20 +31,24 @@ def do_the_thing():
     announcer.sse('finished', 'phase')
 
 
-def setup(mutex: Lock):
+lock_file = gettempdir() + '/button.lock'
+
+
+def setup():
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def callback(evt):
         announcer.log('Button callback')
-        if not mutex.acquire(blocking=False):
+        if exists(lock_file):
             announcer.log('Dropping button press')
             return
         try:
-            print("Doing the thing")
+            with open(lock_file, 'w') as f:
+                pass
             do_the_thing()
         finally:
-            mutex.release()
+            os.remove(lock_file)
 
     GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
