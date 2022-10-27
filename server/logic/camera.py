@@ -1,4 +1,4 @@
 def take_picture():
     # Take picture using usb webcam
     # Returns the path to the picture
-    pass
+    return 'https://imgur.com/eK5WqGs'

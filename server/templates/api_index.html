@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>SIM Barcelona app</title>
+        <script type="module" src="/assets/app.mjs"></script>
+    </head>
+    <body>
+        <div id="main">
+            <div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Koala_climbing_tree.jpg/640px-Koala_climbing_tree.jpg"/>
+            </div>  
+            <!-- <form>
+                <a href="/python_call_test" id=test>
+                    <button class='btn btn-default'>Test</button>
+                </a>
+            </form>       -->
+        </div>
+    </body>
+</html>
+
+<script>
+    function myFunction() {
+        document.getElementById("main").innerHTML += `
+            <div id="loading-div" class="loading-div">
+                <text class="loading-text">loading...</text>
+            </div>`
+        setTimeout(() => disableLoading(), 3000)
+    }
+
+    function disableLoading() {
+        const mainEl = document.getElementById("main");
+        mainEl.removeChild(mainEl.lastChild)
+    }
+</script>
+
+<style>
+.loading-div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(1,1,1,.2);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.loading-text {
+    /* width: inherit;
+    height: inherit; */
+    font-size: 15em;
+    color: white;
+    text-shadow: 0 0 20px #000; /* horizontal-offset vertical-offset 'blur' colour */
+}
+</style>

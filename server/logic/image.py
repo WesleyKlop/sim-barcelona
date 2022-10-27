@@ -21,23 +21,27 @@ class ImageGenerator:
         self.model = None
 
     def generate(self, image_path: str) -> str:
+        print('generate image')
         if self.model == None:
             print("Loading hub model")
             self.model = hub.load(HUB_MODULE)
 
         image_path = self.load_image(image_path, IMAGE_SIZE_CONTENT)
         style_image = self.load_image(get_random_style_image(), IMAGE_SIZE_STYLE)
+        print('pre tf.nn.avg_pool')
         style_image = tf.nn.avg_pool(
             style_image,
             ksize=[3, 3],
             strides=[1, 1],
             padding='SAME'
         )
+        print('pre output')
         outputs = self.model(
             tf.constant(image_path),
             tf.constant(style_image)
         )
 
+        print('pre write file')
         outFile = generate_random_filepath()
         # Write the generated image tensor to the outFile
         tf.io.write_file(outFile, tf.image.encode_png(outputs[0]))
@@ -60,6 +64,7 @@ class ImageGenerator:
     def load_image(image_path: str, image_size=(256, 256), preserve_aspect_ratio=True):
         """Loads and preprocesses images."""
         # Load and convert to float32 numpy array, add batch dimension, and normalize to range [0, 1].
+        print(f'load image: {image_path}')
         img = tf.io.decode_image(
             tf.io.read_file(image_path),
             channels=3,
