@@ -33,10 +33,15 @@ def do_the_thing():
 
 
 lock_file = gettempdir() + '/button.lock'
+is_called = False
 
 
 def setup():
     assert threading.current_thread() is threading.main_thread()
+    global is_called
+    if is_called:
+        return
+    is_called = True
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
