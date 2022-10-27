@@ -20,13 +20,15 @@ def do_the_thing():
 
     img_path = take_picture(os.path.abspath('public/results'))
     announcer.announce(
-        format_sse(flask.url_for('static', filename='results/' + os.path.basename(img_path)), 'start'))
+        format_sse(flask.url_for('static', filename='results/' + os.path.basename(img_path)), 'start')
+    )
     if img_path is None:
         announcer.log('Failed to take picture')
         return None
     announcer.log('Got picture')
 
     result = generator.generate(img_path, os.path.abspath('public/results'))
+    announcer.log('Generated picture')
     announcer.announce(
         format_sse(flask.url_for('static', filename='results/' + result), 'result')
     )
