@@ -70,18 +70,18 @@ class ImageGenerator:
         )()
 
     def generate(self, image_path: str, dest_path: str) -> str:
-        announcer.log('Started generation')
+        announcer.log('Starting image generation. Loading images...')
         content_image = self.load_image(image_path, IMAGE_SIZE_CONTENT)
         style_image = self.load_image(
             get_random_style_image(),
             IMAGE_SIZE_STYLE
         )
-        announcer.log('Images loaded')
-
+        announcer.log('Tranforming images.')
+        
         style_bottleneck = self.predict(style_image)
         stylized_image = self.transform(content_image, style_bottleneck)
 
-        announcer.log('Image transformed')
+        announcer.log('Image transformed. Saving image...')
         out_file = generate_random_filepath(dest_path)
         # Write the generated image tensor to the outFile
         encoded_image = tf.image.encode_png(
@@ -93,7 +93,7 @@ class ImageGenerator:
             )
         )
         tf.io.write_file(out_file, encoded_image)
-        announcer.log('Image saved')
+        announcer.log('Image saved.')
 
         return os.path.basename(out_file)
 

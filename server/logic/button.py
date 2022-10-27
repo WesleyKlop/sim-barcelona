@@ -10,9 +10,29 @@ from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
 
+def setup(mutex: Lock):
+    announcer.log(f"Running setup. Mutex: {mutex.acquire(blocking=False)}")
+    GPIO.setwarnings(True)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-def do_the_thing():
-    log.info('Starting a run')
+    def callback(evt):
+        announcer.log(f'Button press: detected. Mutex lock state: {mutex.acquire(blocking=False)}.')
+        if not mutex.acquire(blocking=False):
+            announcer.log('Button press: canceling')
+            return
+        try:
+            print("Button press: accepted. Generating image.")
+            generateImage()
+        finally:
+            mutex.release()
+
+    announcer.log()
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
+    pass
+
+def generateImage():
+    log.info('Generating image...')
     announcer.sse('running', 'phase')
     generator = ImageGenerator()
     announcer.log('Got button press')
@@ -22,28 +42,9 @@ def do_the_thing():
         announcer.log('Failed to take picture')
         return None
     announcer.sse('/results/' + basename(img_path), 'image')
-    announcer.log('Got picture')
+    announcer.log('Image successfully taken.')
 
     result = generator.generate(img_path, abspath('public/results'))
     announcer.log('Generated picture')
     announcer.sse('/results/' + result, 'image')
     announcer.sse('finished', 'phase')
-
-
-def setup(mutex: Lock):
-    GPIO.setwarnings(True)
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-    def callback(evt):
-        announcer.log('Button callback')
-        if not mutex.acquire(blocking=False):
-            announcer.log('Dropping button press')
-            return
-        try:
-            print("Doing the thing")
-            do_the_thing()
-        finally:
-            mutex.release()
-
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
