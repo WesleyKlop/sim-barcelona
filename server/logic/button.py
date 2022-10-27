@@ -32,7 +32,7 @@ def setup(mutex: Lock):
     pass
 
 def generateImage():
-    log.info('Generating image...')
+    announcer.log('------Generating image...')
     announcer.sse('running', 'phase')
     generator = ImageGenerator()
     announcer.log('Got button press')
