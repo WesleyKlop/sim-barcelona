@@ -10,8 +10,6 @@ from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
 
-mutex = Lock()
-
 
 def do_the_thing():
     log.info('Starting a run')
@@ -32,21 +30,19 @@ def do_the_thing():
     announcer.sse('finished', 'phase')
 
 
-def callback(evt):
-    global mutex
-    if not mutex.acquire(blocking=False):
-        announcer.log('Dropping button press')
-        return
-    try:
-        print("Doing the thing")
-        do_the_thing()
-    finally:
-        mutex.release()
-
-
-def setup():
+def setup(mutex: Lock):
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    def callback(evt):
+        if not mutex.acquire(blocking=False):
+            announcer.log('Dropping button press')
+            return
+        try:
+            print("Doing the thing")
+            do_the_thing()
+        finally:
+            mutex.release()
 
     GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
