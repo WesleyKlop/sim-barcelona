@@ -1,7 +1,6 @@
 const evtSource = new EventSource('/api/listen')
 
 const $log = document.querySelector('#log')
-const $before = document.querySelector('#before')
 const $result = document.querySelector('#result')
 const $loadingOverlay = document.querySelector('#loading-overlay')
 const $main = document.documentElement;
@@ -9,7 +8,7 @@ const $main = document.documentElement;
 evtSource.addEventListener('start', ({data}) => {
     console.log("start")
     $log.innerHTML = 'Log:\n'
-    $before.src = data
+    $result.src = data
 
     $loadingOverlay.classList.remove('hidden')
 })
