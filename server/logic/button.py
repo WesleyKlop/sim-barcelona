@@ -1,6 +1,7 @@
 import logging as log
 from os.path import abspath, basename
 from threading import Lock
+from time import time
 
 import RPi.GPIO as GPIO
 
@@ -10,8 +11,11 @@ from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
 
+last_timestamp = 0
+
 
 def do_the_thing():
+    global last_timestamp
     log.info('Starting a run')
     announcer.sse('running', 'phase')
     generator = ImageGenerator()
@@ -28,6 +32,7 @@ def do_the_thing():
     announcer.log('Generated picture')
     announcer.sse('/results/' + result, 'image')
     announcer.sse('finished', 'phase')
+    last_timestamp = time()
 
 
 def setup(lock: Lock):
@@ -35,7 +40,10 @@ def setup(lock: Lock):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    def rise_callback(evt):
+    def callback(evt):
+        global last_timestamp
+        if time() - last_timestamp < 60:
+            announcer.log('Debouncing')
         announcer.log('Button callback')
         if not lock.acquire(blocking=False):
             announcer.log('Dropping button press')
@@ -48,5 +56,4 @@ def setup(lock: Lock):
     def fall_callback(evt):
         announcer.log('Button fallCallback')
 
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=rise_callback, bouncetime=400)
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=fall_callback, bouncetime=400)
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback, bouncetime=400)
