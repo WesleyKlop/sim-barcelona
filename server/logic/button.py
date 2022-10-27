@@ -22,12 +22,12 @@ def setup(mutex: Lock):
             announcer.log('Button press: canceling')
             return
         try:
-            print("Button press: accepted. Generating image.")
+            announcer.log("Button press: accepted. Generating image.")
             generate_image()
         finally:
             mutex.release()
 
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.BOTH, callback=callback, bouncetime=400)
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.BOTH, callback=callback, bouncetime=200)
 
 def generate_image():
     announcer.log('------Generating image...')
