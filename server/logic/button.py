@@ -32,7 +32,9 @@ def do_the_thing():
 
 
 def callback(evt):
+    global mutex
     if not mutex.acquire(blocking=False):
+        announcer.log('Dropping button press')
         return
     try:
         do_the_thing()
