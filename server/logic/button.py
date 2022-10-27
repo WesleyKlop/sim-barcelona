@@ -47,4 +47,4 @@ def setup(cb=callback):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=cb)
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=cb)
