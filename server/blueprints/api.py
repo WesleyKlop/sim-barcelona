@@ -6,6 +6,8 @@ from server.logic.announcer import announcer
 from server.logic import format_sse
 from server.logic import do_the_thing
 
+import time
+
 api = Blueprint('api', __name__, url_prefix='/api')
 
 #main app html
@@ -20,9 +22,10 @@ def onButtonClick():
     pass
 
 #python call test
-@app.route('/python_call_test')
+@api.route('/python_call_test')
 def background_process_test():
     print ("Hello")
+    time.sleep(5)
     return ("nothing")
 
 
