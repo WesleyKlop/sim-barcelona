@@ -53,7 +53,4 @@ def setup(lock: Lock):
         finally:
             lock.release()
 
-    def fall_callback(evt):
-        announcer.log('Button fallCallback')
-
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback, bouncetime=400)
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
