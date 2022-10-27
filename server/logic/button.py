@@ -34,7 +34,7 @@ def generateImage():
     announcer.log('------Generating image...')
     announcer.sse('running', 'phase')
     generator = ImageGenerator()
-    announcer.log('Got button press')
+    announcer.log('made image generator')
 
     img_path = take_picture(abspath('public/results'))
     if img_path is None:
