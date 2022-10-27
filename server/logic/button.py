@@ -16,7 +16,7 @@ def setup(mutex: Lock):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    def callback(evt):
+    def rise_callback(evt):
         announcer.log(f'Button press: detected. Mutex lock state: {mutex.locked()}.')
         if not mutex.acquire(blocking=False):
             announcer.log('Button press: canceling')
@@ -27,7 +27,11 @@ def setup(mutex: Lock):
         finally:
             mutex.release()
 
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
+    def fall_callback(evt):
+        announcer.log('Fall callback')
+
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=rise_callback, bouncetime=400)
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=fall_callback, bouncetime=400)
     pass
 
 def generateImage():
