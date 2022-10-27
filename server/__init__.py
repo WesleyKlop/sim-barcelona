@@ -3,10 +3,11 @@ from os.path import abspath
 from flask import Flask, g, request, Response
 
 from .blueprints.api import api
+from .logic import button
 
 
 def create_app() -> Flask:
-    print("Creating app")
+    button.setup()
     app = Flask(
         __name__,
         static_folder=abspath('public'),
