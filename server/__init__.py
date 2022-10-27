@@ -7,6 +7,7 @@ from .logic import button
 
 
 def create_app() -> Flask:
+    print("Create app called")
     button.setup()
     app = Flask(
         __name__,
