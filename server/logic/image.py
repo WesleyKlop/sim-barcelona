@@ -1,14 +1,13 @@
 import functools
 
 import tensorflow as tf
-import tensorflow_hub as hub
 
 from .fs import generate_random_filepath
 from .styles import get_random_style_image
 
 IMAGE_SIZE_OUTPUT = 384
 IMAGE_SIZE_CONTENT = (IMAGE_SIZE_OUTPUT, IMAGE_SIZE_OUTPUT)
-# The style prediction model was trained with image size 256 and it's the
+# The style prediction model was trained with image size 256, and it's the
 # recommended image size for the style image (though, other sizes work as
 # well but will lead to different results).
 IMAGE_SIZE_STYLE = (256, 256)
@@ -65,31 +64,21 @@ class ImageGenerator:
             IMAGE_SIZE_STYLE
         )
 
-        style_image = tf.nn.avg_pool(
-            style_image,
-            ksize=[3, 3],
-            strides=[1, 1],
-            padding='SAME'
-        )
-
         style_bottleneck = self.predict(style_image)
         stylized_image = self.transform(content_image, style_bottleneck)
 
-        outFile = generate_random_filepath()
+        out_file = generate_random_filepath()
         # Write the generated image tensor to the outFile
         tf.io.write_file(
-            outFile,
+            out_file,
             tf.image.encode_png(
                 tf.squeeze(
-                    tf.convert_to_tensor(
-                        stylized_image,
-                        dtype=tf.uint8
-                    )
+                    tf.image.convert_image_dtype(stylized_image, dtype=tf.uint8)
                 )
             )
         )
 
-        return outFile
+        return out_file
 
     def crop(self, image):
         """Returns a cropped square image."""

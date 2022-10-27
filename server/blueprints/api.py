@@ -31,7 +31,7 @@ def listen():
 def test():
     generator = ImageGenerator()
 
-    img_path = take_picture()
+    # img_path = take_picture()
     result = generator.generate('/Users/wesley/Downloads/litter.jpeg')
     announcer.announce(format_sse(result, 'result'))
     return result, HTTPStatus.OK
