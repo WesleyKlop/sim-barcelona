@@ -1,5 +1,6 @@
 from os.path import abspath, basename
 from threading import Lock
+import logging as log
 
 import RPi.GPIO as GPIO
 
@@ -9,10 +10,10 @@ from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
 
-mutex = Lock()
-
+mutex = False
 
 def do_the_thing():
+    log.info('Starting a run')
     announcer.sse('running', 'phase')
     generator = ImageGenerator()
     announcer.log('Got button press')
@@ -32,13 +33,15 @@ def do_the_thing():
 
 def callback(evt):
     global mutex
-    if not mutex.acquire(blocking=False):
+    if mutex is True:
+        log.warn('')
         announcer.log('Dropping button press')
         return
     try:
+        mutex = True
         do_the_thing()
     finally:
-        mutex.release()
+        mutex = False
 
 
 def setup(cb=callback):
