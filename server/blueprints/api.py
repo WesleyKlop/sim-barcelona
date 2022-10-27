@@ -4,8 +4,7 @@ from os.path import abspath, join
 import flask
 from flask import Blueprint, Response
 
-from server.logic import format_sse
-from server.logic.announcer import announcer
+from server.logic.announcer import announcer, format_sse
 from server.logic.camera import take_picture
 from server.logic.image import ImageGenerator
 
