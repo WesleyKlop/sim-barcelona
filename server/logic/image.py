@@ -3,6 +3,7 @@ import os.path
 
 import tensorflow as tf
 
+from .announcer import announcer
 from .fs import generate_random_filepath
 from .styles import get_random_style_image
 
@@ -26,12 +27,14 @@ class ImageGenerator:
         )
 
     def __init__(self):
+        announcer.log('Loading models')
         self.transform_path = None
         self.predict_path = None
         if len(tf.config.list_physical_devices('GPU')) == 0:
             self.load_int8_models()
         else:
             self.load_fp16_models()
+        announcer.log('Models loaded')
 
     def predict(self, style_image):
         # Load the model.
@@ -67,15 +70,18 @@ class ImageGenerator:
         )()
 
     def generate(self, image_path: str, dest_path: str) -> str:
+        announcer.log('Started generation')
         content_image = self.load_image(image_path, IMAGE_SIZE_CONTENT)
         style_image = self.load_image(
             get_random_style_image(),
             IMAGE_SIZE_STYLE
         )
+        announcer.log('Images loaded')
 
         style_bottleneck = self.predict(style_image)
         stylized_image = self.transform(content_image, style_bottleneck)
 
+        announcer.log('Image transformed')
         out_file = generate_random_filepath(dest_path)
         # Write the generated image tensor to the outFile
         encoded_image = tf.image.encode_png(
@@ -87,6 +93,7 @@ class ImageGenerator:
             )
         )
         tf.io.write_file(out_file, encoded_image)
+        announcer.log('Image saved')
 
         return os.path.basename(out_file)
 

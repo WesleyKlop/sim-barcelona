@@ -35,6 +35,7 @@ def test():
 
     img_path = take_picture()
     if img_path is None:
+        announcer.log('Failed to take picture')
         return 'Failure', HTTPStatus.IM_A_TEAPOT
 
     result = generator.generate(img_path, abspath('public/results'))
