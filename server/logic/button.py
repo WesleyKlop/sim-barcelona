@@ -13,7 +13,7 @@ mutex = Lock()
 
 
 def do_the_thing():
-    announcer.sse('start', 'phase')
+    announcer.sse('running', 'phase')
     announcer.log('Got button press')
     generator = ImageGenerator()
     announcer.log('Created image generator')
