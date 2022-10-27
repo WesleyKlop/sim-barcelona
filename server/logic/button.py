@@ -3,7 +3,7 @@ from os.path import abspath, basename
 import RPi.GPIO as GPIO
 import flask
 
-from server.logic.announcer import announcer
+from server.logic.announcer import announcer, format_sse
 from server.logic.camera import take_picture
 from server.logic.image import ImageGenerator
 
@@ -19,15 +19,17 @@ def do_the_thing():
     announcer.log('Created image generator')
 
     img_path = take_picture(abspath('public/results'))
-    announcer.sse(flask.url_for('static', filename='results/' + basename(img_path)), 'start')
-
+    announcer.announce(
+        format_sse(flask.url_for('static', filename='results/' + basename(img_path)), 'start'))
     if img_path is None:
         announcer.log('Failed to take picture')
         return
     announcer.log('Got picture')
 
     result = generator.generate(img_path, abspath('public/results'))
-    announcer.sse(flask.url_for('static', filename='results/' + result), 'result')
+    announcer.announce(
+        format_sse(flask.url_for('static', filename='results/' + result), 'result')
+    )
 
 
 def callback(evt):
