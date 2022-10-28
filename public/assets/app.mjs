@@ -1,8 +1,8 @@
-const evtSource = new EventSource('/api/listen')
-
 const $log = document.querySelector('#log')
 const $result = document.querySelector('#result')
 const $loadingOverlay = document.querySelector('#loading-overlay')
+
+const evtSource = new EventSource('/api/listen')
 
 const clearLog = () => {
     $log.innerHTML = 'Log:\n'
@@ -13,24 +13,29 @@ const setImage = (url) => {
 }
 
 const setLoading = (isLoading) => {
-    if(isLoading) {
+    if (isLoading) {
         $loadingOverlay.classList.remove('hidden')
     } else {
         $loadingOverlay.classList.add('hidden')
     }
 }
 
-evtSource.addEventListener('phase', ({data}) => {
-    console.log('New phase', data)
+const BLANK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
 
-    switch(data) {
+evtSource.addEventListener('phase', ({data}) => {
+    switch (data) {
         case 'running':
             clearLog()
             setLoading(true)
-            setImage('data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==')
+            setImage(BLANK_IMAGE)
             break
         case 'finished':
             setLoading(false)
+            break
+        case 'error':
+            $log.classList.remove('hidden')
+            setLoading(false)
+            setImage(BLANK_IMAGE)
             break
     }
 })
@@ -40,13 +45,5 @@ evtSource.addEventListener('image', ({data}) => {
 })
 
 evtSource.addEventListener('log', ({data}) => {
-    $log.innerHTML += data + '\n'
-})
-
-evtSource.addEventListener('error', async (evt) => {
-    $log.classList.remove('hidden')
-    $log.innerHTML += evt.data
-    // Sleep 10s and reload the page
-    await new Promise(res => setTimeout(res, 10000))
-    location.reload()
+    $log.innerHTML += data.trim() + '\n'
 })

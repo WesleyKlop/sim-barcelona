@@ -16,16 +16,6 @@ IMAGE_SIZE_STYLE = (256, 256)
 
 
 class ImageGenerator:
-    def load_int8_models(self):
-        self.predict_path = tf.keras.utils.get_file(
-            'style_predict.tflite',
-            'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/prediction/1?lite-format=tflite'
-        )
-        self.transform_path = tf.keras.utils.get_file(
-            'style_transform.tflite',
-            'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/transfer/1?lite-format=tflite'
-        )
-
     def __init__(self):
         announcer.log('Loading models')
         self.transform_path = None
@@ -120,9 +110,12 @@ class ImageGenerator:
             dtype=tf.float32
         )[tf.newaxis, ...]
 
-        img = self.crop(img)  # TODO: maybe this can be removed?
+        img = self.crop(img)
         img = tf.image.resize(
-            img, image_size, preserve_aspect_ratio=preserve_aspect_ratio)
+            img,
+            image_size,
+            preserve_aspect_ratio=preserve_aspect_ratio
+        )
         return img
 
     def load_fp16_models(self):
@@ -133,4 +126,14 @@ class ImageGenerator:
         self.transform_path = tf.keras.utils.get_file(
             'style_transform.tflite',
             'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/fp16/transfer/1?lite-format=tflite'
+        )
+
+    def load_int8_models(self):
+        self.predict_path = tf.keras.utils.get_file(
+            'style_predict.tflite',
+            'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/prediction/1?lite-format=tflite'
+        )
+        self.transform_path = tf.keras.utils.get_file(
+            'style_transform.tflite',
+            'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/transfer/1?lite-format=tflite'
         )

@@ -1,15 +1,9 @@
-import os.path
-from http import HTTPStatus
-from os.path import abspath
+from flask import Blueprint, Response
 
-import flask
-from flask import Blueprint, Response, render_template
-
-from server.logic.announcer import announcer, format_sse
-from server.logic.camera import take_picture
-from server.logic.image import ImageGenerator
+from server.logic.announcer import announcer
 
 api = Blueprint('api', __name__, url_prefix='/api')
+
 
 @api.route('/listen', methods=['GET'])
 def listen():

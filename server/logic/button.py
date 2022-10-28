@@ -1,7 +1,6 @@
 import logging as log
 from os.path import abspath, basename
 from threading import Lock, Thread, Timer
-from time import time
 
 import RPi.GPIO as GPIO
 
