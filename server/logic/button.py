@@ -1,6 +1,6 @@
 import logging as log
 from os.path import abspath, basename
-from threading import Lock
+from threading import Lock, Thread, Timer
 from time import time
 
 import RPi.GPIO as GPIO
@@ -11,11 +11,42 @@ from server.logic.image import ImageGenerator
 
 BUTTON_PIN = 7
 
-last_timestamp = 0
+
+class ButtonHandler(Thread):
+    def __init__(self, pin, func, edge='both', bouncetime=200):
+        super().__init__(daemon=True)
+
+        self.edge = edge
+        self.func = func
+        self.pin = pin
+        self.bouncetime = float(bouncetime) / 1000
+
+        self.lastpinval = GPIO.input(self.pin)
+        self.lock = Lock()
+
+    def __call__(self, *args):
+        if not self.lock.acquire(blocking=False):
+            return
+
+        t = Timer(self.bouncetime, self.read, args=args)
+        t.start()
+
+    def read(self, *args):
+        pinval = GPIO.input(self.pin)
+
+        if (
+                ((pinval == 0 and self.lastpinval == 1) and
+                 (self.edge in ['falling', 'both'])) or
+                ((pinval == 1 and self.lastpinval == 0) and
+                 (self.edge in ['rising', 'both']))
+        ):
+            self.func(*args)
+
+        self.lastpinval = pinval
+        self.lock.release()
 
 
-def do_the_thing():
-    global last_timestamp
+def do_the_thing(evt):
     log.info('Starting a run')
     announcer.sse('running', 'phase')
     generator = ImageGenerator()
@@ -40,17 +71,6 @@ def setup(lock: Lock):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    def callback(evt):
-        global last_timestamp
-        if time() - last_timestamp < 60:
-            announcer.log('Debouncing')
-        announcer.log('Button callback')
-        if not lock.acquire(blocking=False):
-            announcer.log('Dropping button press')
-            return
-        try:
-            do_the_thing()
-        finally:
-            lock.release()
-
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=callback)
+    cb = ButtonHandler(BUTTON_PIN, do_the_thing, edge='rising', bouncetime=100)
+    cb.start()
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING, callback=cb)
