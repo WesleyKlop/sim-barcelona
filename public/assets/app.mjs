@@ -27,6 +27,7 @@ evtSource.addEventListener('phase', ({data}) => {
         case 'running':
             clearLog()
             setLoading(true)
+            setImage('data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==')
             break
         case 'finished':
             setLoading(false)
