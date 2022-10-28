@@ -3,7 +3,7 @@ from random import choice
 
 styles = [
     'gaudi_1.jpeg',
-    # 'dali_1.webp',
+    'dali_1.jpg',
     'picasso_1.png',
     'gaudi_2.jpeg',
     'picasso_2.jpeg',
