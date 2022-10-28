@@ -62,7 +62,7 @@ class ImageGenerator:
     def generate(self, image_path: str, dest_path: str) -> str:
         announcer.log('Started generation')
         style = get_random_style_image()
-        announcer.sse(f'/assets/{basename(style)}', 'style')
+        announcer.sse("/assets/" + basename(style), 'style')
         content_image = self.load_image(image_path, IMAGE_SIZE_CONTENT)
         style_image = self.load_image(style, IMAGE_SIZE_STYLE)
         announcer.log('Images loaded')
