@@ -66,10 +66,16 @@ class ImageGenerator:
             get_random_style_image(),
             IMAGE_SIZE_STYLE
         )
+        style_bottleneck_content_image = self.load_image(image_path, IMAGE_SIZE_STYLE)
         announcer.log('Images loaded')
 
         style_bottleneck = self.predict(style_image)
-        stylized_image = self.transform(content_image, style_bottleneck)
+        style_bottleneck_content = self.predict(style_bottleneck_content_image)
+        stylized_image = self.blend(
+            content_image,
+            style_bottleneck_content,
+            style_bottleneck
+        )
 
         announcer.log('Image transformed')
         out_file = generate_random_filepath(dest_path)
@@ -137,3 +143,13 @@ class ImageGenerator:
             'style_transform.tflite',
             'https://tfhub.dev/google/lite-model/magenta/arbitrary-image-stylization-v1-256/int8/transfer/1?lite-format=tflite'
         )
+
+    def blend(self, content_image, style_bottleneck_content, style_bottleneck):
+        content_blending_ratio = 0.5
+
+        # Blend the style bottleneck of style image and content image
+        style_bottleneck_blended = content_blending_ratio * style_bottleneck_content + (
+                1 - content_blending_ratio) * style_bottleneck
+
+        # Stylize the content image using the style bottleneck.
+        return self.transform(style_bottleneck_content, content_image)
