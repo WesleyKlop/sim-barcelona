@@ -66,7 +66,7 @@ def do_the_thing(evt):
     last_timestamp = time()
 
 
-def setup(lock: Lock):
+def setup():
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
