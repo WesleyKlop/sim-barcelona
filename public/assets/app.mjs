@@ -1,7 +1,6 @@
 const $log = document.querySelector('#log')
 const $result = document.querySelector('#result')
 const $loadingOverlay = document.querySelector('#loading-overlay')
-const $style = document.querySelector('#style')
 
 const evtSource = new EventSource('/api/listen')
 
@@ -43,10 +42,6 @@ evtSource.addEventListener('phase', ({data}) => {
 
 evtSource.addEventListener('image', ({data}) => {
     setImage(data)
-})
-
-evtSource.addEventListener('style', ({data}) => {
-    $style.src = data
 })
 
 evtSource.addEventListener('log', ({data}) => {
